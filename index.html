@@ -10,7 +10,7 @@
         table,
         th,
         td {
-            border:solid black;
+            border: solid black;
             border-collapse: collapse;
         }
     </style>
@@ -72,6 +72,50 @@
         </tr>
     </table>
     <hr>
+    <h4>Rank of a matrix</h4>
+    <blockquote> 
+        In linear algebra, the rank of a matrix A is the dimension of the vector space generated (or spanned)
+        by its columns.
+        This corresponds to the maximal number of linearly independent columns of A.
+        <br>
+        <a href="https://en.wikipedia.org/wiki/Rank_(linear_algebra)"> https://en.wikipedia.org/wiki/Rank_(linear_algebra) </a>
+    </blockquote>
+
+    <pre>
+
+    const double EPS = 1E-9;
+
+    int compute_rank(vector<vector<double>> A) {
+    int n = A.size();
+    int m = A[0].size();
+
+    int rank = 0;
+    vector<bool> row_selected(n, false);
+    for (int i = 0; i < m; ++i) {
+        int j;
+        for (j = 0; j < n; ++j) {
+            if (!row_selected[j] && abs(A[j][i]) > EPS)
+                break;
+        }
+
+        if (j != n) {
+            ++rank;
+            row_selected[j] = true;
+            for (int p = i + 1; p < m; ++p)
+                A[j][p] /= A[j][i];
+            for (int k = 0; k < n; ++k) {
+                if (k != j && abs(A[k][i]) > EPS) {
+                    for (int p = i + 1; p < m; ++p)
+                        A[k][p] -= A[j][p] * A[k][i];
+                }
+            }
+        }
+    }
+    return rank;
+}
+
+    </pre>
+    <a href="https://cp-algorithms.com/linear_algebra/rank-matrix.html"> https://cp-algorithms.com/linear_algebra/rank-matrix.html </a>
 
 </body>
 
